@@ -1,1 +1,165 @@
-Put source code here.
+#include "LedControl.h"
+#include "ButtonControl.h"
+
+bool redTurn=true;
+
+void clearField(){
+	for(unsigned int x=0; x < WIDTH; x++){
+		for(unsigned int y=0; y < HEIGHT; y++){
+			state[x][y] = ALL_OFF;
+		}
+	}
+}
+
+void switchTurn(){
+	if(redTurn){
+		redTurn = false;
+		showWhiteTurn();
+	} else {
+		redTurn = true;
+		showRedTurn();
+	}
+}
+
+bool hasWon(unsigned int desiredLedState){
+	if((desiredLedState != RED_LED_ON) && (desiredLedState != WHITE_LED_ON)){
+		return false;
+	}
+	
+	for(unsigned int x=0; x < WIDTH; x++){
+		bool allTaken = true;
+		for(unsigned int y=0; y < HEIGHT; y++){
+			if(state[x][y] != desiredLedState){
+				allTaken = false;
+				
+				break;
+			}
+		}
+		if(allTaken){
+			return true;
+		}
+	}
+	
+	for(unsigned int y=0; y < HEIGHT; y++){
+		bool allTaken = true;
+		for(unsigned int x=0; x < WIDTH; x++){
+			if(state[x][y] != desiredLedState){
+				allTaken = false;
+				
+				break;
+			}
+		}
+		if(allTaken){
+			return true;
+		}
+	}
+
+	bool allTaken1 = true;
+	bool allTaken2 = true;
+	for(unsigned int xy=0; (xy < HEIGHT) && (xy < WIDTH); xy++){
+		if(state[xy][xy] != desiredLedState){
+			allTaken1 = false;
+		}
+		if(state[xy][WIDTH-1-xy] != desiredLedState){
+			allTaken2 = false;
+		}
+	}
+	if(allTaken1 || allTaken2){
+		return true;
+	}
+
+	return false;
+}
+
+bool draw(){
+	for(unsigned int x=0; x < WIDTH; x++){
+		for(unsigned int y=0; y < HEIGHT; y++){
+			if(state[x][y] == ALL_OFF){
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+void processButtonPress(unsigned int x, unsigned int y, unsigned int side){
+	if(state[x][y] != ALL_OFF){
+		return;
+	} else {
+		state[x][y] = side;
+
+		if(hasWon(side)){
+			switchTurn();
+			delay(100);
+			switchTurn();
+			delay(100);
+			switchTurn();
+			delay(100);
+			switchTurn();
+			delay(100);
+			switchTurn();
+			delay(100);
+			clearField();
+		} else if(draw()){
+			switchTurn();
+			clearField();
+		} else {
+			switchTurn();
+		}
+	}
+}
+
+void checkButtons(){
+	for(unsigned int y=0; y < HEIGHT; y++){
+		turnOnButtonSet(y);
+		for(unsigned int x=0; x < WIDTH; x++){
+			if(redTurn){
+				unsigned int rX = convert_button_red_x(x, y);
+				unsigned int rY = convert_button_red_y(x, y);
+
+				if(readRedSet(x)){
+					processButtonPress(rX,rY, RED_LED_ON);
+				}
+			} else {
+				unsigned int wX = convert_button_white_x(x, y);
+				unsigned int wY = convert_button_white_y(x, y);
+
+				if(readWhiteSet(x)){
+					processButtonPress(wX,wY, WHITE_LED_ON);
+				}
+			}
+		}
+		turnOffButtonSet(y);
+		delay(1);
+	}
+}
+
+void setup() {
+	for(unsigned int x=0; x < WIDTH; x++){
+		pinMode(x_r_pins[x], OUTPUT);
+		pinMode(x_w_pins[x], OUTPUT);
+	}
+	for(unsigned int y=0; y < HEIGHT; y++){
+		pinMode(y_pins[y], OUTPUT);
+		pinMode(button_power_pins[y], OUTPUT);
+	}
+	
+	for(unsigned int y=0; y < HEIGHT; y++){
+		turnOffButtonSet(y);
+	}
+
+	pinMode(PIN_RED_TURN_INDICATOR, OUTPUT);
+	pinMode(PIN_WHITE_TURN_INDICATOR, OUTPUT);
+
+	if(redTurn){
+		showRedTurn();
+	} else {
+		showWhiteTurn();
+	}
+}
+
+
+void loop() {
+	showLeds();
+	checkButtons();
+}
