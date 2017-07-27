@@ -2,6 +2,7 @@
 #include "ButtonControl.h"
 
 bool redTurn=true;
+bool AI=true;
 
 void clearField(){
 	for(unsigned int x=0; x < WIDTH; x++){
@@ -134,6 +135,12 @@ void checkButtons(){
 	}
 }
 
+/*
+ * void selectAI(){
+ * 
+ * }
+ */
+
 void setup() {
 	for(unsigned int x=0; x < WIDTH; x++){
 		pinMode(x_r_pins[x], OUTPUT);
@@ -150,6 +157,8 @@ void setup() {
 
 	pinMode(PIN_RED_TURN_INDICATOR, OUTPUT);
 	pinMode(PIN_WHITE_TURN_INDICATOR, OUTPUT);
+
+  //selectAI();
 
 	if(redTurn){
 		showRedTurn();
