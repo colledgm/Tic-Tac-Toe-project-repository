@@ -2,7 +2,7 @@
 #include "ButtonControl.h"
 
 bool redTurn=true;
-bool AI=true;
+bool AI=false;
 
 void clearField(){
 	for(unsigned int x=0; x < WIDTH; x++){
@@ -135,11 +135,41 @@ void checkButtons(){
 	}
 }
 
-/*
- * void selectAI(){
- * 
- * }
- */
+void selectAI(){
+   bool done=false;//to determine if a button was pushed, a loop withing the set-up is needed
+   while(!done){//to me, go over this part to make sure it only reads a button input from either side.
+      for(unsigned int y=0; y < HEIGHT; y++){
+        turnOnButtonSet(y);
+        for(unsigned int x=0; x < WIDTH; x++){
+          if(redTurn){
+            unsigned int rX = convert_button_red_x(x, y);
+            unsigned int rY = convert_button_red_y(x, y);
+
+            if(readRedSet(x)){
+              AI=false;//set the game to 2 player if a red-side button was pushed.
+            }
+          } else {
+            unsigned int wX = convert_button_white_x(x, y);
+            unsigned int wY = convert_button_white_y(x, y);
+
+            if(readWhiteSet(x)){
+              AI=true;//set the game to AI if a white-side button was pushed.
+            }
+          }
+        }
+        turnOffButtonSet(y);
+        delay(1);
+      }
+   }
+  }
+
+void AIturn(){
+     //select a point.
+    
+    
+    redTurn = true;
+    showRedTurn();
+}
 
 void setup() {
 	for(unsigned int x=0; x < WIDTH; x++){
@@ -158,7 +188,8 @@ void setup() {
 	pinMode(PIN_RED_TURN_INDICATOR, OUTPUT);
 	pinMode(PIN_WHITE_TURN_INDICATOR, OUTPUT);
 
-  //selectAI();
+  //selectAI(); //user choses if AI is being used
+  delay(1500);
 
 	if(redTurn){
 		showRedTurn();
@@ -169,6 +200,17 @@ void setup() {
 
 
 void loop() {
-	showLeds();
-	checkButtons();
+  showLeds();
+  if(AI)
+  {
+	  if(redTurn){
+      checkButtons();
+	  }else{
+      AIturn();
+	  }
+  }
+  else
+  {
+    checkButtons();
+  }
 }
