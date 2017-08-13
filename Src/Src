@@ -142,18 +142,16 @@ void selectAI(){
         turnOnButtonSet(y);
         for(unsigned int x=0; x < WIDTH; x++){
           if(redTurn){
-            unsigned int rX = convert_button_red_x(x, y);
-            unsigned int rY = convert_button_red_y(x, y);
 
             if(readRedSet(x)){
               AI=false;//set the game to 2 player if a red-side button was pushed.
+              done=true;
             }
           } else {
-            unsigned int wX = convert_button_white_x(x, y);
-            unsigned int wY = convert_button_white_y(x, y);
 
             if(readWhiteSet(x)){
               AI=true;//set the game to AI if a white-side button was pushed.
+              done=true;
             }
           }
         }
@@ -165,10 +163,74 @@ void selectAI(){
 
 void AIturn(){
      //select a point.
+     int ran = random(0,90);
+    if(ran <= 10){
+      turnOnButtonSet(0);
+      unsigned int wX = convert_button_white_x(0, 0);
+      unsigned int wY = convert_button_white_y(0, 0);
+       
+      processButtonPress(wX,wY, WHITE_LED_ON);              
+      turnOffButtonSet(0);      
+    }else if(ran <= 20){
+      turnOnButtonSet(0);
+      unsigned int wX = convert_button_white_x(1, 0);
+      unsigned int wY = convert_button_white_y(1, 0);
+       
+      processButtonPress(wX,wY, WHITE_LED_ON);  
+      turnOffButtonSet(0);
+    }else if(ran <= 30){
+      turnOnButtonSet(0);
+      unsigned int wX = convert_button_white_x(2, 0);
+      unsigned int wY = convert_button_white_y(2, 0);
+       
+      processButtonPress(wX,wY, WHITE_LED_ON);  
+      turnOffButtonSet(0);
+    }else if(ran <= 40){
+      turnOnButtonSet(1);
+      unsigned int wX = convert_button_white_x(0, 1);
+      unsigned int wY = convert_button_white_y(0, 1);
+       
+      processButtonPress(wX,wY, WHITE_LED_ON);  
+      turnOffButtonSet(1);
+    }else if(ran <= 50){
+      turnOnButtonSet(1);
+      unsigned int wX = convert_button_white_x(1, 1);
+      unsigned int wY = convert_button_white_y(1, 1);
+       
+      processButtonPress(wX,wY, WHITE_LED_ON);  
+      turnOffButtonSet(1);
+    }else if(ran <= 60){
+      turnOnButtonSet(1);
+      unsigned int wX = convert_button_white_x(2, 1);
+      unsigned int wY = convert_button_white_y(2, 1);
+       
+      processButtonPress(wX,wY, WHITE_LED_ON);  
+      turnOffButtonSet(1);
+    }else if(ran <= 70){
+      turnOnButtonSet(2);
+      unsigned int wX = convert_button_white_x(0, 2);
+      unsigned int wY = convert_button_white_y(0, 2);
+       
+      processButtonPress(wX,wY, WHITE_LED_ON);  
+      turnOffButtonSet(2);
+    }else if(ran <= 80){
+      turnOnButtonSet(2);
+      unsigned int wX = convert_button_white_x(1, 2);
+      unsigned int wY = convert_button_white_y(1, 2);
+       
+      processButtonPress(wX,wY, WHITE_LED_ON);  
+      turnOffButtonSet(2);
+    }else if(ran <= 90){
+      turnOnButtonSet(2);
+      unsigned int wX = convert_button_white_x(2, 2);
+      unsigned int wY = convert_button_white_y(2, 2);
+       
+      processButtonPress(wX,wY, WHITE_LED_ON);  
+      turnOffButtonSet(2);
+    }
     
-    
-    redTurn = true;
-    showRedTurn();
+    //redTurn = true;
+    //showRedTurn();
 }
 
 void setup() {
@@ -188,7 +250,8 @@ void setup() {
 	pinMode(PIN_RED_TURN_INDICATOR, OUTPUT);
 	pinMode(PIN_WHITE_TURN_INDICATOR, OUTPUT);
 
-  //selectAI(); //user choses if AI is being used
+  randomSeed(analogRead(0));
+  selectAI(); //user choses if AI is being used
   delay(1500);
 
 	if(redTurn){
