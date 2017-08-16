@@ -1,7 +1,7 @@
 #include "LedControl.h"
 #include "ButtonControl.h"
 
-bool redTurn=true;
+bool redTurn=false;
 bool AI=false;
 
 void clearField(){
@@ -135,25 +135,24 @@ void checkButtons(){
 	}
 }
 
+//new additional functions
 void selectAI(){
    bool done=false;//to determine if a button was pushed, a loop withing the set-up is needed
    while(!done){//to me, go over this part to make sure it only reads a button input from either side.
       for(unsigned int y=0; y < HEIGHT; y++){
         turnOnButtonSet(y);
         for(unsigned int x=0; x < WIDTH; x++){
-          if(redTurn){
-
-            if(readRedSet(x)){
+         if(readRedSet(x)){
               AI=false;//set the game to 2 player if a red-side button was pushed.
               done=true;
-            }
-          } else {
+          }
+          
 
-            if(readWhiteSet(x)){
+          if(readWhiteSet(x)){
               AI=true;//set the game to AI if a white-side button was pushed.
               done=true;
-            }
           }
+          
         }
         turnOffButtonSet(y);
         delay(1);
@@ -162,14 +161,13 @@ void selectAI(){
   }
 
 void AIturn(){
-     //select a point.
-     int ran = random(0,90);
+     int ran = random(0,90);//random number generator
     if(ran <= 10){
-      turnOnButtonSet(0);
+      turnOnButtonSet(0);//select column
       unsigned int wX = convert_button_white_x(0, 0);
-      unsigned int wY = convert_button_white_y(0, 0);
+      unsigned int wY = convert_button_white_y(0, 0);//select row
        
-      processButtonPress(wX,wY, WHITE_LED_ON);              
+      processButtonPress(wX,wY, WHITE_LED_ON);//the computer presses a button.  
       turnOffButtonSet(0);      
     }else if(ran <= 20){
       turnOnButtonSet(0);
@@ -229,9 +227,10 @@ void AIturn(){
       turnOffButtonSet(2);
     }
     
-    //redTurn = true;
-    //showRedTurn();
+    redTurn = true;
+    showRedTurn();
 }
+//additional functions end
 
 void setup() {
 	for(unsigned int x=0; x < WIDTH; x++){
@@ -252,7 +251,7 @@ void setup() {
 
   randomSeed(analogRead(0));
   selectAI(); //user choses if AI is being used
-  delay(1500);
+  delay(500);//prevent's a button push from being registered again.
 
 	if(redTurn){
 		showRedTurn();
@@ -266,7 +265,7 @@ void loop() {
   showLeds();
   if(AI)
   {
-	  if(redTurn){
+	  if(redTurn){//red turn is player controled.
       checkButtons();
 	  }else{
       AIturn();
