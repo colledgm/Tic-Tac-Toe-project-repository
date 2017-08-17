@@ -161,74 +161,95 @@ void selectAI(){
   }
 
 void AIturn(){
+  bool done=false;
+  while(!done){
      int ran = random(0,90);//random number generator
-    if(ran <= 10){
+    if(ran <= 10){//AI looks at a button
       turnOnButtonSet(0);//select column
       unsigned int wX = convert_button_white_x(0, 0);
       unsigned int wY = convert_button_white_y(0, 0);//select row
-       
-      processButtonPress(wX,wY, WHITE_LED_ON);//the computer presses a button.  
-      turnOffButtonSet(0);      
+
+      if(state[wX][wY] == ALL_OFF){//if the button is not pushed
+      processButtonPress(wX,wY, WHITE_LED_ON);//the computer presses a button.   
+      done=true;    }
+      turnOffButtonSet(0);  
     }else if(ran <= 20){
       turnOnButtonSet(0);
       unsigned int wX = convert_button_white_x(1, 0);
       unsigned int wY = convert_button_white_y(1, 0);
        
-      processButtonPress(wX,wY, WHITE_LED_ON);  
-      turnOffButtonSet(0);
+      if(state[wX][wY] == ALL_OFF){
+      processButtonPress(wX,wY, WHITE_LED_ON);   
+      done=true;    }
+      turnOffButtonSet(0); 
     }else if(ran <= 30){
       turnOnButtonSet(0);
       unsigned int wX = convert_button_white_x(2, 0);
       unsigned int wY = convert_button_white_y(2, 0);
        
-      processButtonPress(wX,wY, WHITE_LED_ON);  
-      turnOffButtonSet(0);
+      if(state[wX][wY] == ALL_OFF){
+      processButtonPress(wX,wY, WHITE_LED_ON);   
+      done=true;    }
+      turnOffButtonSet(0); 
     }else if(ran <= 40){
       turnOnButtonSet(1);
       unsigned int wX = convert_button_white_x(0, 1);
       unsigned int wY = convert_button_white_y(0, 1);
        
-      processButtonPress(wX,wY, WHITE_LED_ON);  
-      turnOffButtonSet(1);
+      if(state[wX][wY] == ALL_OFF){
+      processButtonPress(wX,wY, WHITE_LED_ON);   
+      done=true;    }
+      turnOffButtonSet(1); 
     }else if(ran <= 50){
       turnOnButtonSet(1);
       unsigned int wX = convert_button_white_x(1, 1);
       unsigned int wY = convert_button_white_y(1, 1);
        
-      processButtonPress(wX,wY, WHITE_LED_ON);  
-      turnOffButtonSet(1);
+      if(state[wX][wY] == ALL_OFF){
+      processButtonPress(wX,wY, WHITE_LED_ON);   
+      done=true;    }
+      turnOffButtonSet(1); 
     }else if(ran <= 60){
       turnOnButtonSet(1);
       unsigned int wX = convert_button_white_x(2, 1);
       unsigned int wY = convert_button_white_y(2, 1);
        
-      processButtonPress(wX,wY, WHITE_LED_ON);  
+      if(state[wX][wY] == ALL_OFF){
+      processButtonPress(wX,wY, WHITE_LED_ON);   
+      done=true;    }
       turnOffButtonSet(1);
     }else if(ran <= 70){
       turnOnButtonSet(2);
       unsigned int wX = convert_button_white_x(0, 2);
       unsigned int wY = convert_button_white_y(0, 2);
        
+      if(state[wX][wY] == ALL_OFF){
       processButtonPress(wX,wY, WHITE_LED_ON);  
-      turnOffButtonSet(2);
+      done=true;    }
+      turnOffButtonSet(2); 
     }else if(ran <= 80){
       turnOnButtonSet(2);
       unsigned int wX = convert_button_white_x(1, 2);
       unsigned int wY = convert_button_white_y(1, 2);
        
-      processButtonPress(wX,wY, WHITE_LED_ON);  
-      turnOffButtonSet(2);
+      if(state[wX][wY] == ALL_OFF){
+      processButtonPress(wX,wY, WHITE_LED_ON);   
+      done=true;    }
+      turnOffButtonSet(2); 
     }else if(ran <= 90){
       turnOnButtonSet(2);
       unsigned int wX = convert_button_white_x(2, 2);
       unsigned int wY = convert_button_white_y(2, 2);
        
-      processButtonPress(wX,wY, WHITE_LED_ON);  
-      turnOffButtonSet(2);
+      if(state[wX][wY] == ALL_OFF){
+      processButtonPress(wX,wY, WHITE_LED_ON);   
+      done=true;    }
+      turnOffButtonSet(2); 
     }
     
     redTurn = true;
     showRedTurn();
+  }
 }
 //additional functions end
 
